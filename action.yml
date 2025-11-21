@@ -1,6 +1,6 @@
-name: "Setup SSH Action"
+name: "Setup SSH Action With Git Configuration"
 description: "Sets up your SSH credentials inside the GitHub virtual environment"
-author: "LuisEnMarroquin"
+author: "NonozgYtb"
 branding:
   color: "blue"
   icon: "cloud"
