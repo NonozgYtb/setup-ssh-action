@@ -21,6 +21,12 @@ inputs:
   USER:
     description: "SSH user"
     required: false
+  GIT_USERNAME:
+    description: "Git username"
+    required: false
+  GIT_EMAIL:
+    description: "Git email"
+    required: false
 runs:
   using: "node20"
   main: "dist/index.js"

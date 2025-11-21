@@ -1,6 +1,6 @@
-import { GitManager } from '../src/git-manager';
-import * as github from '@actions/github';
 import * as core from '@actions/core';
+import * as github from '@actions/github';
+import { GitManager } from '../src/git-manager';
 import * as utils from '../src/utils';
 
 // Mock dependencies
@@ -42,7 +42,7 @@ describe('GitManager', () => {
         writable: true
       });
 
-      await gitManager.configureGit();
+      await gitManager.configureGit({});
 
       expect(mockedUtils.executeCommand).toHaveBeenCalledWith('git config --global user.name "John Doe"');
       expect(mockedUtils.executeCommand).toHaveBeenCalledWith('git config --global user.email "john@example.com"');
@@ -67,7 +67,7 @@ describe('GitManager', () => {
         writable: true
       });
 
-      await gitManager.configureGit();
+      await gitManager.configureGit({});
 
       expect(mockedUtils.executeCommand).toHaveBeenCalledWith('git config --global user.name "Jane Smith"');
       expect(mockedUtils.executeCommand).toHaveBeenCalledWith('git config --global user.email "jane@example.com"');
@@ -84,7 +84,7 @@ describe('GitManager', () => {
         writable: true
       });
 
-      await gitManager.configureGit();
+      await gitManager.configureGit({});
 
       expect(mockedUtils.executeCommand).toHaveBeenCalledWith('git config --global user.name "testuser"');
       expect(mockedUtils.executeCommand).toHaveBeenCalledWith('git config --global user.email "testuser@users.noreply.github.com"');
@@ -99,7 +99,7 @@ describe('GitManager', () => {
         writable: true
       });
 
-      await gitManager.configureGit();
+      await gitManager.configureGit({});
 
       expect(mockedUtils.executeCommand).toHaveBeenCalledWith('git config --global user.name "GitHub Action"');
       expect(mockedUtils.executeCommand).toHaveBeenCalledWith('git config --global user.email "action@github.com"');
@@ -123,7 +123,7 @@ describe('GitManager', () => {
         writable: true
       });
 
-      await gitManager.configureGit();
+      await gitManager.configureGit({});
 
       expect(mockedUtils.executeCommand).toHaveBeenCalledWith('git config --global user.name "John Doe"');
       expect(mockedUtils.executeCommand).toHaveBeenCalledWith('git config --global user.email "johndoe@users.noreply.github.com"');
@@ -149,7 +149,7 @@ describe('GitManager', () => {
         writable: true
       });
 
-      await gitManager.configureGit();
+      await gitManager.configureGit({});
 
       expect(mockedCore.warning).toHaveBeenCalledWith('Git configuration failed: Git config failed');
     });
@@ -170,7 +170,7 @@ describe('GitManager', () => {
         writable: true
       });
 
-      await gitManager.configureGit();
+      await gitManager.configureGit({});
 
       expect(mockedUtils.executeCommand).toHaveBeenCalledWith('git config --global user.name "GitHub Action"');
       expect(mockedUtils.executeCommand).toHaveBeenCalledWith('git config --global user.email "action@github.com"');

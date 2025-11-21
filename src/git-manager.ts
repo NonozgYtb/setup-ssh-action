@@ -1,13 +1,14 @@
-import { context } from "@actions/github";
 import { info, warning } from "@actions/core";
-import { executeCommand } from "./utils";
+import { context } from "@actions/github";
 import type { GitConfig } from "./types";
+import { executeCommand } from "./utils";
 
 export class GitManager {
-  public async configureGit(): Promise<void> {
+  public async configureGit(gitConfig: GitConfig): Promise<void> {
     try {
-      const gitConfig = this.extractGitConfig();
-      await this.setGitConfig(gitConfig);
+      const defaultGitConfig = this.extractGitConfig();
+      const finalGitConfig: GitConfig = { userName: gitConfig.userName || defaultGitConfig.userName, userEmail: gitConfig.userEmail || defaultGitConfig.userEmail };
+      await this.setGitConfig(finalGitConfig);
       info("Git configuration completed successfully");
     } catch (error) {
       warning(`Git configuration failed: ${error instanceof Error ? error.message : String(error)}`);

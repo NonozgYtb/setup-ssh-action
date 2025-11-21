@@ -1,7 +1,7 @@
-import { setFailed, info } from "@actions/core";
+import { info, setFailed } from "@actions/core";
+import { GitManager } from "./git-manager";
 import { InputValidator } from "./input-validator";
 import { SSHManager } from "./ssh-manager";
-import { GitManager } from "./git-manager";
 
 async function run(): Promise<void> {
   try {
@@ -14,12 +14,13 @@ async function run(): Promise<void> {
     // Get and validate inputs
     const inputs = validator.getAndValidateInputs();
     const sshConfig = validator.inputsToSSHConfig(inputs);
+    const gitConfig = validator.inputsToGitConfig(inputs);
 
     // Setup SSH
     await sshManager.setupSSH(sshConfig);
 
     // Configure Git
-    await gitManager.configureGit();
+    await gitManager.configureGit(gitConfig);
 
     info("SSH Action setup completed successfully");
   } catch (error) {

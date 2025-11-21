@@ -59,18 +59,22 @@ jobs:
           NAME: production
           PORT: ${{ secrets.PORT }} # 3000
           USER: ${{ secrets.USER }} # admin
+          GIT_USERNAME: ${{ secrets.GIT_USERNAME }} # JohnDoe - only if the action user needs to be different than the commit author
+          GIT_EMAIL: ${{ secrets.GIT_EMAIL }} # john.doe@example.com - only if the action user needs to be different than the commit author
       - run: ssh production ls --help
 ```
 
 ## Inputs
 
-| Key      | Value Information                                                                | Required | Validation |
-| -------- | -------------------------------------------------------------------------------- | -------- | ---------- |
-| `ORIGIN` | Where to log in, can be a **Domain** or **IP address**, defaults to `github.com` | **No**   | Hostname/IP format validation |
-| `SSHKEY` | Your SSH access key, it's better to store it on your repository secrets          | **Yes**  | SSH key format validation (RSA, Ed25519, ECDSA, DSS) |
-| `NAME`   | How you can refer to the SSH key in the next commands, defaults to `ORIGIN`      | **No**   | Max 255 characters |
-| `PORT`   | The port that will be on the SSH config                                          | **No**   | Valid port number (1-65535) |
-| `USER`   | The user that will be on the SSH config                                          | **No**   | Max 32 characters |
+| Key            | Value Information                                                                | Required | Validation |
+| --------       | -------------------------------------------------------------------------------- | -------- | ---------- |
+| `ORIGIN`       | Where to log in, can be a **Domain** or **IP address**, defaults to `github.com` | **No**   | Hostname/IP format validation |
+| `SSHKEY`       | Your SSH access key, it's better to store it on your repository secrets          | **Yes**  | SSH key format validation (RSA, Ed25519, ECDSA, DSS) |
+| `NAME`         | How you can refer to the SSH key in the next commands, defaults to `ORIGIN`      | **No**   | Max 255 characters |
+| `PORT`         | The port that will be on the SSH config                                          | **No**   | Valid port number (1-65535) |
+| `USER`         | The user that will be on the SSH config                                          | **No**   | Max 32 characters |
+| `GIT_USERNAME` | The git username to configure, defaults to commit author or GitHub actor         | **No**   | Valid git username format (and 39 characters) |
+| `GIT_EMAIL`    | The git email to configure, defaults to commit author or GitHub actor            | **No**   | Valid email format (and 255 characters) |
 
 ### 🔐 **Security Notes**
 

@@ -1,5 +1,5 @@
+import { error as coreError, info, warning } from "@actions/core";
 import { execSync } from "child_process";
-import { info, warning, error as coreError } from "@actions/core";
 import type { Platform } from "./types";
 
 export function executeCommand(command: string): string {
@@ -64,6 +64,34 @@ export function validateOrigin(origin?: string): boolean {
 
   if (!validOriginPattern.test(origin)) {
     warning(`Origin "${origin}" may not be a valid hostname or IP address`);
+  }
+
+  return true;
+}
+
+export function validateEmail(email?: string): boolean {
+  if (!email) return true; // Email is optional
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email regex, not 100%  RFC compliant
+
+  if (!emailPattern.test(email)) {
+    throw new Error("Invalid email format");
+  }
+
+  if (email.length > 255) {
+    throw new Error("Email must be 255 characters or less");
+  }
+
+  return true;
+}
+
+export const validateGitUsername = (username?: string): boolean => {
+  if (!username) return true; // Username is optional
+
+  const gitUsernamePattern = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
+
+  if (!gitUsernamePattern.test(username)) {
+    throw new Error("Invalid git username format");
   }
 
   return true;

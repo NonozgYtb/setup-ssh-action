@@ -7,8 +7,8 @@ export interface SSHConfig {
 }
 
 export interface GitConfig {
-  userName: string;
-  userEmail: string;
+  userName?: string;
+  userEmail?: string;
 }
 
 export interface ActionInputs {
@@ -17,6 +17,8 @@ export interface ActionInputs {
   USER?: string;
   ORIGIN?: string;
   SSHKEY: string;
+  GIT_USERNAME?: string;
+  GIT_EMAIL?: string;
 }
 
 export interface Platform {

@@ -1,6 +1,6 @@
 import { getInput } from "@actions/core";
-import { validateSSHKey, validatePort, validateOrigin } from "./utils";
-import type { ActionInputs, SSHConfig } from "./types";
+import type { ActionInputs, GitConfig, SSHConfig } from "./types";
+import { validateEmail, validateGitUsername, validateOrigin, validatePort, validateSSHKey } from "./utils";
 
 export class InputValidator {
   public getAndValidateInputs(): ActionInputs {
@@ -9,7 +9,9 @@ export class InputValidator {
       PORT: getInput("PORT") || undefined,
       USER: getInput("USER") || undefined,
       ORIGIN: getInput("ORIGIN") || "github.com",
-      SSHKEY: getInput("SSHKEY")
+      SSHKEY: getInput("SSHKEY"),
+      GIT_USERNAME: getInput("GIT_USERNAME") || undefined,
+      GIT_EMAIL: getInput("GIT_EMAIL") || undefined
     };
 
     this.validateInputs(inputs);
@@ -24,6 +26,8 @@ export class InputValidator {
     validateSSHKey(inputs.SSHKEY);
     validatePort(inputs.PORT);
     validateOrigin(inputs.ORIGIN);
+    validateEmail(inputs.GIT_EMAIL);
+    validateGitUsername(inputs.GIT_USERNAME);
 
     if (inputs.NAME && inputs.NAME.length > 255) {
       throw new Error("NAME must be 255 characters or less");
@@ -41,6 +45,13 @@ export class InputValidator {
       user: inputs.USER,
       origin: inputs.ORIGIN || "github.com",
       sshKey: inputs.SSHKEY
+    };
+  }
+
+  public inputsToGitConfig(inputs: ActionInputs): GitConfig {
+    return {
+      userName: inputs.GIT_USERNAME,
+      userEmail: inputs.GIT_EMAIL
     };
   }
 }

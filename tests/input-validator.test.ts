@@ -1,5 +1,5 @@
-import { InputValidator } from '../src/input-validator';
 import * as core from '@actions/core';
+import { InputValidator } from '../src/input-validator';
 
 // Mock @actions/core
 jest.mock('@actions/core', () => ({
@@ -70,6 +70,37 @@ describe('InputValidator', () => {
 
       expect(() => validator.getAndValidateInputs()).toThrow('SSHKEY input is required');
     });
+
+    it('should throw error for invalid email', () => {
+      mockedCore.getInput.mockImplementation((name: string) => {
+        switch (name) {
+          case 'GIT_EMAIL':
+            return 'invalid-email';
+          case 'SSHKEY':
+            return 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC...';
+          default:
+            return '';
+        }
+      });
+
+      expect(() => validator.getAndValidateInputs()).toThrow('Invalid email format');
+    });
+
+    it('should throw error for invalid username', () => {
+      mockedCore.getInput.mockImplementation((name: string) => {
+        switch (name) {
+          case 'GIT_USERNAME':
+            return 'extra-long-username-that-exceeds-thirty-nine-characters';
+          case 'SSHKEY':
+            return 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC...';
+          default:
+            return '';
+        }
+      });
+
+      expect(() => validator.getAndValidateInputs()).toThrow('Invalid git username format');
+    });
+
 
     it('should throw error for invalid SSH key', () => {
       mockedCore.getInput.mockImplementation((name: string) => {
@@ -162,6 +193,32 @@ describe('InputValidator', () => {
       expect(config.user).toBeUndefined();
       expect(config.origin).toBe('github.com');
       expect(config.sshKey).toBe('ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC...');
+    });
+  });
+
+  describe('inputsToGitConfig', () => {
+    it('should convert inputs to Git config correctly', () => {
+      const inputs = {
+        GIT_USERNAME: 'gituser',
+        GIT_EMAIL: 'gituser@example.com',
+        SSHKEY: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC..." // just to satisfy the other requirements
+      };
+
+      const config = validator.inputsToGitConfig(inputs);
+
+      expect(config.userName).toBe('gituser');
+      expect(config.userEmail).toBe('gituser@example.com');
+    });
+
+    it('should handle minimal inputs', () => {
+      const inputs = {
+        SSHKEY: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC..." // just to satisfy the type requirement
+      };
+
+      const config = validator.inputsToGitConfig(inputs);
+
+      expect(config.userName).toBeUndefined();
+      expect(config.userEmail).toBeUndefined();
     });
   });
 });
